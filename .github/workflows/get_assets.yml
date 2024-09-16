@@ -17,15 +17,19 @@ jobs:
 
     - name: Get release information
       id: get_release
-      uses: octokit/request-action@v2
+      uses: softprops/action-gh-release@v1
       with:
-        route: GET /repos/crisarbebvc/vericlear/releases/tags/16.09.2024
-        mediaType: '{"accept":"application/vnd.github.v3+json"}'
         token: ${{ secrets.TOKEN_VERICLEAR }}
+        release: latest
 
-    - name: Download assets
+    - name: Download release assets
+      id: download_assets
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        url: https://github.com/crisarbebvc/vericlear
+        name: assets
+
+    - name: Extract release assets 
       run: |
-        ASSETS=$(echo "${{ steps.get_release.outputs.data }}" | jq -r '.assets[] | select(.name | endswith(".jar")).browser_download_url')
-        for ASSET_URL in $ASSETS; do
-          curl -L -o $(basename $ASSET_URL) $ASSET_URL
-        done
+        mkdir -p assets
+        tar -xzf assets/assets.tar.gz -C assets
