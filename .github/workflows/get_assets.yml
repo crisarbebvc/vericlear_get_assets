@@ -17,7 +17,7 @@ jobs:
 
     - name: Get release information
       id: get_release
-      uses: octokit/request-action@v2.x
+      uses: octokit/request-action@v2
       with:
         route: GET /repos/crisarbebvc/vericlear/releases/tags/16.09.2024
         mediaType: '{"accept":"application/vnd.github.v3+json"}'
