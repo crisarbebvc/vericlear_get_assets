@@ -1,0 +1,31 @@
+name: Download GitHub Release Assets
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  download-assets:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Get release information
+      id: get_release
+      uses: octokit/request-action@v2.x
+      with:
+        route: GET /repos/crisarbebvc/vericlear/releases/tags/16.09.2024
+        mediaType: '{"accept":"application/vnd.github.v3+json"}'
+        token: ${{ secrets.TOKEN_VERICLEAR }}
+
+    - name: Download assets
+      run: |
+        ASSETS=$(echo "${{ steps.get_release.outputs.data }}" | jq -r '.assets[] | select(.name | endswith(".jar")).browser_download_url')
+        for ASSET_URL in $ASSETS; do
+          curl -L -o $(basename $ASSET_URL) $ASSET_URL
+        done
