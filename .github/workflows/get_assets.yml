@@ -15,21 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Get release information
-      id: get_release
-      uses: softprops/action-gh-release@v1
-      with:
-        token: ${{ secrets.TOKEN_VERICLEAR }}
-        tag: 16.09.2024
-
     - name: Download release assets
-      id: download_assets
-      uses: dawidd6/action-download-artifact@v2
+    - uses: houqp/download-release-assets@v1
       with:
-        url: https://github.com/crisarbebvc/vericlear
-        name: assets
-
-    - name: Extract release assets 
-      run: |
-        mkdir -p assets
-        tar -xzf assets/assets.tar.gz -C assets
+        release: 16.09.2024
+        repo: crisarbebvc/vericlear
+        match: ".jar"
