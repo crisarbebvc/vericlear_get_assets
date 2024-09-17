@@ -20,4 +20,4 @@ jobs:
       with:
         release: 16.09.2024
         repo: crisarbebvc/vericlear
-        match: ".jar"
+        match: ".jar$"
